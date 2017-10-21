@@ -42,16 +42,16 @@ int findPath(){
 
     while(!robotAMoves.empty() && !robotBMoves.empty()){ //Do movement while there's tiles to study
 
-        cout << "Current cost: " << CURRENT_COST << " list size: " << robotAMoves.size() << endl;
+        //cout << "Current cost: " << CURRENT_COST << " list size: " << robotAMoves.size() << endl;
         //cin >> help;
 
         for(int cID = 0; cID < robotAMoves.size(); cID++){
             //cout << "Pos Cost: " << robotAMoves[cID].cost << "\nCurrent Cost: " << CURRENT_COST <<endl;
 
-            //cout << "Robot A: " << robotAMoves[cID].posX << " " << robotAMoves[cID].posY << " Cost: " << robotAMoves[cID].cost <<endl;
-            //cout << "Robot B: " << robotBMoves[cID].posX << " " << robotBMoves[cID].posY << " Cost: " << robotBMoves[cID].cost <<endl;
-
             if(robotAMoves[cID].cost != CURRENT_COST) continue; //Only check positions with the current cost
+
+//            cout << "Robot A: " << robotAMoves[cID].posX << " " << robotAMoves[cID].posY << " Cost: " << robotAMoves[cID].cost << " Direction: " << robotAMoves[cID].direction <<endl;
+//            cout << "Robot B: " << robotBMoves[cID].posX << " " << robotBMoves[cID].posY << " Cost: " << robotBMoves[cID].cost << " Direction: " << robotBMoves[cID].direction <<endl;
 
             //Check if end reached
             if((robotAMoves[cID].posX == destiA.posX && robotAMoves[cID].posY == destiA.posY &&
@@ -89,22 +89,28 @@ int findPath(){
                    }
                 }
 
+//                cout << "Can move: A: " << ACanMove << " B: " << BCanMove <<endl;
+//                cout << "robotApos + dir X: " << robotAMoves[cID].posX + moveArrX[robotAMoves[cID].direction] << " Y: " << robotAMoves[cID].posY + moveArrY[robotAMoves[cID].direction] <<endl;
+//                cout << "robotBpos       X: " << robotBMoves[cID].posX << " Y: " << robotBMoves[cID].posX <<endl;
+
                 AMoved = BMoved = false;
                 if(ACanMove || BCanMove){ //At least one of them can move
-                    if((ACanMove && !BCanMove && robotBMoves[cID].posX != robotAMoves[cID].posX + moveArrX[robotAMoves[cID].direction] && //A moves, B doesn't move nor collides with B
-                                                 robotBMoves[cID].posY != robotAMoves[cID].posY + moveArrY[robotAMoves[cID].direction])||
+                    if((ACanMove && !BCanMove && (robotBMoves[cID].posX != robotAMoves[cID].posX + moveArrX[robotAMoves[cID].direction]  || //A moves, B doesn't move nor collides with B
+                                                  robotBMoves[cID].posY != robotAMoves[cID].posY + moveArrY[robotAMoves[cID].direction]))||
                        (ACanMove && BCanMove)){ //Both robots moves //Do robot A movement
 
                         AMoved = true; //Robot A moved flag
                     }
 
-                    if((BCanMove && !ACanMove && robotAMoves[cID].posX != robotBMoves[cID].posX + moveArrX[robotBMoves[cID].direction] && //B moves, A doesn't move nor collides with A
-                                                 robotAMoves[cID].posY != robotBMoves[cID].posY + moveArrY[robotBMoves[cID].direction])||
+                    if((BCanMove && !ACanMove && (robotAMoves[cID].posX != robotBMoves[cID].posX + moveArrX[robotBMoves[cID].direction]  || //B moves, A doesn't move nor collides with A
+                                                  robotAMoves[cID].posY != robotBMoves[cID].posY + moveArrY[robotBMoves[cID].direction]))||
                        (ACanMove && BCanMove)){ //Both robots moves //Do robot A movement
 
                         BMoved = true; //Robot B moved flag
                     }
                 }
+
+                //cout << "Moved Flags: A: " << AMoved << " B: " << BMoved <<endl;
 
                 if(AMoved){ //Robot A moved correctly, apply movement
                     Pos2 _robotA;
